@@ -18,6 +18,7 @@ package shapeless
 
 import scala.deriving._
 import scala.quoted._
+import given scala.quoted._
 
 /**
  * Evidence that type `T` has annotation `A`, and provides an instance of the annotation.
