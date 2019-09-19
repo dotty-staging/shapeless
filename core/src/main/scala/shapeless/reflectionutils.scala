@@ -18,7 +18,7 @@ package shapeless
 
 import scala.annotation.tailrec
 import scala.deriving._
-import scala.quoted._
+import scala.quoted.{_, given}
 
 class ReflectionUtils[Q <: QuoteContext & Singleton](val q: Q) {
   implicit val qctx: Q = q

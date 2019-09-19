@@ -17,7 +17,7 @@
 package shapeless
 
 import scala.compiletime._
-import scala.quoted._
+import scala.quoted.{_, given}
 
 /**
  * Type class supporting type safe cast.

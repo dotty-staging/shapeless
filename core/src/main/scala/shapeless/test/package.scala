@@ -16,7 +16,7 @@
 
 package shapeless
 
-import scala.quoted._
+import scala.quoted.{_, given}
 
 package object test {
   def typed[T](t : => T): Unit = {}
