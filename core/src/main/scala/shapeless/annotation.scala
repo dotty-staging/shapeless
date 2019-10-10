@@ -123,7 +123,7 @@ object Annotations {
 }
 
 object AnnotationMacros {
-  def mkAnnotation[A: Type, T: Type](given qctx: QuoteContext): Expr[Annotation[A, T]] = {
+  def mkAnnotation[A: TypeTag, T: TypeTag](given qctx: QuoteContext): Expr[Annotation[A, T]] = {
     import qctx.tasty.{_, given}
 
     val annotTpe = typeOf[A]
@@ -142,7 +142,7 @@ object AnnotationMacros {
     }
   }
 
-  def mkAnnotations[A: Type, T: Type](m: Expr[Mirror.Of[T]])(given qctx: QuoteContext): Expr[Annotations[A, T]] = {
+  def mkAnnotations[A: TypeTag, T: TypeTag](m: Expr[Mirror.Of[T]])(given qctx: QuoteContext): Expr[Annotations[A, T]] = {
     import qctx.tasty.{_, given}
 
     val annotTpe = typeOf[A]
@@ -159,7 +159,7 @@ object AnnotationMacros {
           case '{ $t: $tt } => '{ Annotations.mkAnnotations[A, T, $tt & Tuple]($t) }
         }
 
-      def findAnnotation[A: quoted.Type](annoteeSym: Symbol): Expr[Option[A]] =
+      def findAnnotation[A: TypeTag](annoteeSym: Symbol): Expr[Option[A]] =
         annoteeSym.annots.find(_.tpe <:< typeOf[A]) match {
           case Some(tree) => '{ Some(${tree.seal.cast[A]}) }
           case None       => '{ None }

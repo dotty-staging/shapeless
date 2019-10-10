@@ -327,7 +327,7 @@ trait Typeable0 {
 object TypeableMacros {
   import Typeable._
 
-  def impl[T: Type](given qctx: QuoteContext): Expr[Typeable[T]] = {
+  def impl[T: TypeTag](given qctx: QuoteContext): Expr[Typeable[T]] = {
     import qctx.tasty.{_, given}
     import util._
 
