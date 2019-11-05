@@ -337,20 +337,20 @@ object TypeableMacros {
 
     val target = typeOf[T]
 
-    def isAbstract(tp: Type): Boolean =
+    def isAbstract(tp: Tpe): Boolean =
       tp.typeSymbol.isAbstractType ||
         (tp match {
           case IsAppliedType(tp) =>
             isAbstract(tp.tycon) || tp.args.exists {
-              case IsType(tp) => isAbstract(tp)
+              case IsTpe(tp) => isAbstract(tp)
               case _ => false
             }
           case _ => false
         })
 
-    def normalize(tp: TypeOrBounds): Type = tp match {
+    def normalize(tp: TypeOrBounds): Tpe = tp match {
       case TypeBounds(lo, _) => lo
-      case IsType(tp) => tp
+      case IsTpe(tp) => tp
     }
 
     def simpleName(tp: TypeOrBounds): String =
@@ -361,19 +361,19 @@ object TypeableMacros {
         case tp => tp.show
       }
 
-    def collectConjuncts(tp: Type): List[Type] = tp match {
+    def collectConjuncts(tp: Tpe): List[Tpe] = tp match {
       case IsAndType(tp) =>
         collectConjuncts(tp.left) ++ collectConjuncts(tp.right)
       case tp => List(tp)
     }
 
-    def collectDisjuncts(tp: Type): List[Type] = tp match {
+    def collectDisjuncts(tp: Tpe): List[Tpe] = tp match {
       case IsOrType(tp) =>
         collectDisjuncts(tp.left) ++ collectDisjuncts(tp.right)
       case tp => List(tp)
     }
 
-    def summonAllTypeables(tps: List[Type]): Option[Expr[Seq[Typeable[_]]]] = {
+    def summonAllTypeables(tps: List[Tpe]): Option[Expr[Seq[Typeable[_]]]] = {
       val ttps = tps.map(tp => AppliedType(TypeableType, List(tp)))
       val instances = ttps.flatMap(ttp => searchImplicit(ttp) match {
         case IsImplicitSearchSuccess(iss) => List(iss.tree.seal.cast[Typeable[_]])
@@ -430,8 +430,8 @@ object TypeableMacros {
       case IsTypeRef(tp) =>
         val qual = tp.qualifier match {
           case IsThisType(tp) => tp.tref
-          case IsType(tp) => tp
-          case _ => null.asInstanceOf[Type]
+          case IsTpe(tp) => tp
+          case _ => null.asInstanceOf[Tpe]
         }
 
         val sym = tp.typeSymbol

@@ -25,9 +25,9 @@ class ReflectionUtils[Q <: QuoteContext & Singleton](val q: Q) {
   import qctx.tasty.{_, given}
 
   case class Mirror(
-    MirroredType: Type,
-    MirroredMonoType: Type,
-    MirroredElemTypes: Seq[Type],
+    MirroredType: Tpe,
+    MirroredMonoType: Tpe,
+    MirroredElemTypes: Seq[Tpe],
     MirroredLabel: String,
     MirroredElemLabels: Seq[String]
   )
@@ -50,20 +50,20 @@ class ReflectionUtils[Q <: QuoteContext & Singleton](val q: Q) {
     }
   }
 
-  def tupleTypeElements(tp: Type): List[Type] = {
-    @tailrec def loop(tp: Type, acc: List[Type]): List[Type] = tp match {
-      case AppliedType(pairTpe, List(IsType(hd), IsType(tl))) => loop(tl, hd :: acc)
+  def tupleTypeElements(tp: Tpe): List[Tpe] = {
+    @tailrec def loop(tp: Tpe, acc: List[Tpe]): List[Tpe] = tp match {
+      case AppliedType(pairTpe, List(IsTpe(hd), IsTpe(tl))) => loop(tl, hd :: acc)
       case _ => acc
     }
     loop(tp, Nil).reverse
   }
 
-  def low(tp: TypeOrBounds): Type = tp match {
-    case IsType(tp) => tp
+  def low(tp: TypeOrBounds): Tpe = tp match {
+    case IsTpe(tp) => tp
     case IsTypeBounds(tp) => tp.low
   }
 
-  def findMemberType(tp: Type, name: String): Option[Type] = tp match {
+  def findMemberType(tp: Tpe, name: String): Option[Tpe] = tp match {
     case Refinement(_, `name`, tp) => Some(low(tp))
     case Refinement(parent, _, _) => findMemberType(parent, name)
     case AndType(left, right) => findMemberType(left, name).orElse(findMemberType(right, name))
