@@ -27,7 +27,7 @@ object adts {
   case class SomeInt(value: Int) extends OptionInt
   case object NoneInt extends OptionInt
 
-  sealed trait Opt[+A] derives Eq, Show, Read, Functor, EmptyK, Pure
+  sealed trait Opt[+A] derives Eq, Show, Read, Functor, EmptyK//, Pure  disabled since it fails with "cannot reduce inline match"
   case class Sm[+A](value: A) extends Opt[A]
   case object Nn extends Opt[Nothing]
 
