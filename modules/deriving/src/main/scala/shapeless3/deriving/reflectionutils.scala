@@ -34,7 +34,7 @@ class ReflectionUtils[Q <: QuoteContext & Singleton](val q: Q) {
 
   object Mirror {
     def apply(mirror: Expr[scala.deriving.Mirror]): Option[Mirror] = {
-      val mirrorTpe = mirror.unseal.tpe.widen
+      val mirrorTpe = mirror.asTerm.tpe.widen
       for {
         mt   <- findMemberType(mirrorTpe, "MirroredType")
         mmt  <- findMemberType(mirrorTpe, "MirroredMonoType")
@@ -54,7 +54,7 @@ class ReflectionUtils[Q <: QuoteContext & Singleton](val q: Q) {
 
       val mtpe = Refinement(MirrorType, "MirroredType", TypeBounds(tpe, tpe))
       val instance = searchImplicit(mtpe) match {
-        case iss: ImplicitSearchSuccess => Some(iss.tree.seal.cast[scala.deriving.Mirror])
+        case iss: ImplicitSearchSuccess => Some(iss.tree.asExprOf[scala.deriving.Mirror])
         case _: ImplicitSearchFailure => None
       }
       instance.flatMap(Mirror(_))
