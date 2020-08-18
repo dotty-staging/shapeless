@@ -1,5 +1,5 @@
 val dottyLatestNightly = dottyLatestNightlyBuild.get
-//val dottyVersion = dottyLatestNightly 
+//val dottyVersion = dottyLatestNightly
 val dottyVersion = "0.25.0-bin-20200609-a3b417b-NIGHTLY"
 //val dottyVersion = "0.24.0-RC1"
 
@@ -17,7 +17,7 @@ lazy val modules: List[ProjectReference] = List(
   typeable
 )
 
-lazy val commonSettings = Seq(
+lazy val commonSettings = Seq(// !!
   scalacOptions ++= Seq(
     "-Xfatal-warnings",
     "-Yexplicit-nulls"
