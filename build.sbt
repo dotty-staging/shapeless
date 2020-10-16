@@ -1,4 +1,4 @@
-val dottyLatestNightly = dottyLatestNightlyBuild.get
+// val dottyLatestNightly = dottyLatestNightlyBuild.get
 //val dottyVersion = dottyLatestNightly 
 val dottyVersion = "0.28.0-bin-20200925-f4528ce-NIGHTLY"
 //val dottyVersion = "0.27.0-RC1"
@@ -6,7 +6,7 @@ val dottyVersion = "0.28.0-bin-20200925-f4528ce-NIGHTLY"
 inThisBuild(Seq(
   organization := "org.typelevel",
   scalaVersion := dottyVersion,
-  crossScalaVersions := Seq(dottyVersion, dottyLatestNightly),
+  // crossScalaVersions := Seq(dottyVersion, dottyLatestNightly),
   updateOptions := updateOptions.value.withLatestSnapshots(false),
 ))
 
