@@ -60,10 +60,11 @@ object K0 {
   inline def summonFirst[F[_], T, U]: F[U] = summonFirst0[LiftP[F, T]].asInstanceOf[F[U]]
 
   transparent inline def summonFirst0[T]: Any = inline erasedValue[T] match {
-    case _: (a *: b) => summonFrom {
-      case aa: `a` => aa
-      case _ => summonFirst0[b]
-    }
+    case _: (a *: b) =>
+      inline summonInlineOpt[`a`] match {
+        case Some(x) => x
+        case None => summonFirst0[b]
+      }
   }
 
   given Ops as Object { // TODO: We probably don't need the given anymore.
@@ -159,10 +160,11 @@ object K1 {
   inline def summonFirst[F[_[_]], T[_], U[_]]: F[U] = summonFirst0[LiftP[F, T]].asInstanceOf[F[U]]
 
   transparent inline def summonFirst0[T]: Any = inline erasedValue[T] match {
-    case _: (a *: b) => summonFrom {
-      case aa: `a` => aa
-      case _ => summonFirst0[b]
-    }
+    case _: (a *: b) =>
+      inline summonInlineOpt[`a`] match {
+        case Some(aa) => aa
+        case _ => summonFirst0[b]
+      }
   }
 
   given Ops as Object {
@@ -250,10 +252,11 @@ object K11 {
   inline def summonFirst[F[_[_[_]]], T[_[_]], U[_[_]]]: F[U] = summonFirst0[LiftP[F, T]].asInstanceOf[F[U]]
 
   transparent inline def summonFirst0[T]: Any = inline erasedValue[T] match {
-    case _: (a *: b) => summonFrom {
-      case aa: `a` => aa
-      case _ => summonFirst0[b]
-    }
+    case _: (a *: b) =>
+      inline summonInlineOpt[`a`] match {
+        case Some(aa) => aa
+        case _ => summonFirst0[b]
+      }
   }
 
   given Ops as Object {
@@ -344,10 +347,11 @@ object K2 {
   inline def summonFirst[F[_[_, _]], T[_, _], U[_, _]]: F[U] = summonFirst0[LiftP[F, T]].asInstanceOf[F[U]]
 
   transparent inline def summonFirst0[T]: Any = inline erasedValue[T] match {
-    case _: (a *: b) => summonFrom {
-      case aa: `a` => aa
-      case _ => summonFirst0[b]
-    }
+    case _: (a *: b) =>
+      inline summonInlineOpt[`a`] match {
+        case Some(aa) => aa
+        case _ => summonFirst0[b]
+      }
   }
 
   given Ops as Object {

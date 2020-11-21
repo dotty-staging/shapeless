@@ -211,8 +211,8 @@ trait Data0 {
       def gmapQ(t: T): List[R] = f(t)
     }
 
-  inline given [F, T, R] as Data[F, T, R] = summonFrom {
-    case fn: Case[F, T, R] => mkData[F, T, R](t => List(fn(t)))
+  inline given [F, T, R] as Data[F, T, R] = inline summonInlineOpt[Case[F, T, R]] match {
+    case Some(fn) => mkData[F, T, R](t => List(fn(t)))
     case _ => mkData[F, T, R](_ => Nil)
   }
 }
@@ -240,10 +240,14 @@ object DataT {
       [t] => (dt: Aux[F, t, t], t: t) => dt.gmapT(t)
     ))
 
-  inline given [F, T, R] as Aux[F, T, R] = summonFrom {
-    case fn: Case[F, T, R] => mkDataT[F, T, R](fn)
-    case ev: (T <:< R) => mkDataT[F, T, R](ev)
-  }
+  inline given [F, T, R] as Aux[F, T, R] =
+    inline summonInlineOpt[Case[F, T, R]] match {
+      case Some(fn) => mkDataT[F, T, R](fn)
+      case _ =>
+        inline summonInlineOpt[T <:< R] match {
+          case Some(ev) => mkDataT[F, T, R](ev)
+        }
+    }
 }
 
 trait Empty[T] {
@@ -317,10 +321,14 @@ object Alt1 {
     def fold[A](f: F[T] => A)(g: G[T] => A): A = g(gt)
   }
 
-  inline given apply[F[_[_]], G[_[_]], T[_]] as Alt1[F, G, T] = summonFrom {
-    case ft: F[T] => new Alt1F(ft)
-    case gt: G[T] => new Alt1G(gt)
-  }
+  inline given apply[F[_[_]], G[_[_]], T[_]] as Alt1[F, G, T] =
+    inline summonInlineOpt[F[T]] match {
+      case Some(ft) => new Alt1F(ft)
+      case _ =>
+        inline summonInlineOpt[G[T]] match {
+          case Some(gt) => new Alt1G(gt)
+        }
+    }
 }
 
 trait Pure[F[_]] {

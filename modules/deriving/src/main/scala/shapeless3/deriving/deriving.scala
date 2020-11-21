@@ -28,9 +28,7 @@ case class Wrap[T](t: T)
 
 type ~>[A[_], B[_]] = [t] => A[t] => B[t]
 
-inline def summon[T] = summonFrom {
-  case t: T => t
-}
+inline def summon[T] = summonInline[T]
 
 inline def summonAsArray[T <: Tuple]: Array[Any] =
   summonAsArray0[T](0, new Array[Any](constValue[Tuple.Size[T]]))
