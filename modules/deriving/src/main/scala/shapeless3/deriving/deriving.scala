@@ -38,7 +38,7 @@ inline def summonAsArray[T <: Tuple]: Array[Any] =
 inline def summonAsArray0[T](i: Int, arr: Array[Any]): Array[Any] = inline erasedValue[T] match {
   case _: EmptyTuple => arr
   case _: (a *: b) =>
-    arr(i) = summon[a]
+    arr(i) = summon[a]: @unchecked
     summonAsArray0[b](i+1, arr)
 }
 
