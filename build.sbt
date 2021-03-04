@@ -1,4 +1,4 @@
-val dottyLatestNightly = dottyLatestNightlyBuild.get
+val dottyLatestNightly = DottyBuild.latestNightlyVersion.get
 val dottyVersion = dottyLatestNightly 
 //val dottyVersion = "3.0.0-RC1"
 
