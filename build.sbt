@@ -1,6 +1,6 @@
 val dottyLatestNightly = dottyLatestNightlyBuild.get
-//val dottyVersion = dottyLatestNightly 
-val dottyVersion = "3.0.0-RC1"
+val dottyVersion = dottyLatestNightly 
+//val dottyVersion = "3.0.0-RC1"
 
 ThisBuild / organization := "org.typelevel"
 ThisBuild / scalaVersion := dottyVersion
@@ -17,6 +17,7 @@ ThisBuild / githubWorkflowBuild := Seq(
   WorkflowStep.Sbt(List("validateJVM"), name = Some("Validate JVM"))
 )
 
+/*
 ThisBuild / githubWorkflowTargetTags ++= Seq("v*")
 ThisBuild / githubWorkflowPublishTargetBranches :=
   Seq(RefPredicate.Equals(Ref.Branch("shapeless-3")), RefPredicate.StartsWith(Ref.Tag("v")))
@@ -35,6 +36,7 @@ ThisBuild / githubWorkflowPublish := Seq(
     )
   )
 )
+*/
 
 addCommandAlias("validateJVM", ";clean;compile;test")
 
